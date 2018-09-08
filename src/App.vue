@@ -1,17 +1,18 @@
 <template>
     <div id="app">
         <h1>Item list</h1>
-        <item-list :items="items" @remove-item="onRemoveItem"></item-list>
-        <p v-if="!items.length">No items!</p>
+        <item-list :items="sharedState.items" @remove-item="onRemoveItem"></item-list>
+        <p v-if="!sharedState.items.length">No items!</p>
         <add-item @add-item="onAddItem"></add-item>
         <hr>
         <h1>Order items</h1>
         <add-item @add-item="onAddOrderItem"></add-item>
-        <item-list :items="orderItems" @remove-item="onRemoveOrderItem"></item-list>
+        <item-list :items="sharedState.orderItems" @remove-item="onRemoveOrderItem"></item-list>
     </div>
 </template>
 
 <script>
+import store from '../store';
 import ItemList from './components/ItemList.vue';
 import AddItem from './components/AddItem.vue';
 
@@ -21,25 +22,24 @@ export default {
     ItemList,
     AddItem,
   },
+  created() {
+    store.fetchItems();
+  },
   data() {
     return {
-      items: [],
-      orderItems: [],
-      selectedItem: {
-        id: '',
-      },
+      sharedState: store.state,
     };
   },
   methods: {
     onAddItem(item) {
-      this.items.push(item);
+      store.addItem(item);
     },
     onAddOrderItem(item) {
       const current = this.items.find(x => x.name === item.name);
       if (!current) {
         return;
       }
-      this.orderItems.push(current);
+      store.addOrderItem(current);
     },
     onRemoveItem(item) {
       this.items.pop(item);
