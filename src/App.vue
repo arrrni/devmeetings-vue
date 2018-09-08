@@ -10,11 +10,22 @@
         <form @submit.prevent="addItem">
             <label for="addItem">Item to add</label>
             <input name="item" id="addItem" v-model="newItem.name" v-validate="'required|min:3'">
+            <div v-show="errors.has('item')">
+                {{ errors.first('item') }}
+            </div>
         </form>
-        <div v-show="errors.has('item')">
-            {{ errors.first('item') }}
-        </div>
-        <button @click="addItem()">Add Item</button>
+        <hr>
+        <h1>Order items</h1>
+        <form @submit.prevent="orderItem">
+            <label for="itemList">Select item from list</label>
+            <select id="itemList" v-model="selectedItem.id">
+                <option v-for="item in items" :key="item.id" :value="item.id">{{ item.name }}</option>
+            </select>
+            <input type="submit" value="Order selected">
+        </form>
+        <ul>
+            <li v-for="item in orderItems" :key="item.id" :id="item.id">{{ item.name }}</li>
+        </ul>
     </div>
 </template>
 
@@ -26,8 +37,12 @@ export default {
   data() {
     return {
       items: [],
+      orderItems: [],
       newItem: {
         name: '',
+      },
+      selectedItem: {
+        id: '',
       },
     };
   },
@@ -47,6 +62,14 @@ export default {
     },
     removeItem(item) {
       this.items.pop(item);
+    },
+    orderItem() {
+      const item = this.items.find(x => x.id === this.selectedItem.id);
+      if (!item) {
+        return;
+      }
+      this.orderItems.push(item);
+      this.selectedItem.id = '';
     },
   },
 };
