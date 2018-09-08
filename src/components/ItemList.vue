@@ -2,7 +2,7 @@
     <div>
         <sort-list :items="items" @item-sort="onItemSort"></sort-list>
         <ul>
-            <item v-for="item in items" :item="item" :key="item.id" @remove-item="removeItem"></item>
+            <item v-for="item in items" :item="item" :key="item.id" @remove-item="removeItem(item)"></item>
         </ul>
     </div>
 
