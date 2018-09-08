@@ -8,6 +8,8 @@
         <h1>Order items</h1>
         <add-item @add-item="onAddOrderItem"></add-item>
         <item-list :items="sharedState.orderItems" @remove-item="onRemoveOrderItem"></item-list>
+        <hr>
+        <find-item></find-item>
     </div>
 </template>
 
@@ -15,10 +17,12 @@
 import store from '../store';
 import ItemList from './components/ItemList.vue';
 import AddItem from './components/AddItem.vue';
+import FindItem from './components/FindItem.vue';
 
 export default {
   name: 'app',
   components: {
+    FindItem,
     ItemList,
     AddItem,
   },
