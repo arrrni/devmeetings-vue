@@ -14,7 +14,6 @@
 </template>
 
 <script>
-import store from '../store';
 import ItemList from './components/ItemList.vue';
 import AddItem from './components/AddItem.vue';
 import FindItem from './components/FindItem.vue';
@@ -27,29 +26,29 @@ export default {
     AddItem,
   },
   created() {
-    store.fetchItems();
+    this.$store.dispatch('fetchItems');
   },
   data() {
     return {
-      sharedState: store.state,
+      sharedState: this.$store.state,
     };
   },
   methods: {
     onAddItem(item) {
-      store.addItem(item);
+      this.$store.dispatch('addItem', item);
     },
     onAddOrderItem(item) {
-      const current = this.items.find(x => x.name === item.name);
+      const current = this.sharedState.items.find(x => x.name === item.name);
       if (!current) {
         return;
       }
-      store.addOrderItem(current);
+      this.$store.dispatch('addOrderItem', current);
     },
     onRemoveItem(item) {
-      this.items.pop(item);
+      this.$store.dispatch('removeItem', item);
     },
     onRemoveOrderItem(item) {
-      this.orderItems.pop(item);
+      this.$store.dispatch('removeOrderItem', item);
     },
   },
 };
