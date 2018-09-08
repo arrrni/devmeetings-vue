@@ -9,8 +9,11 @@
         <p v-if="!items.length">No items!</p>
         <form @submit.prevent="addItem">
             <label for="addItem">Item to add</label>
-            <input id="addItem" type="text" v-model="newItem.name">
+            <input name="item" id="addItem" v-model="newItem.name" v-validate="'required|min:3'">
         </form>
+        <div v-show="errors.has('item')">
+            {{ errors.first('item') }}
+        </div>
         <button @click="addItem()">Add Item</button>
     </div>
 </template>
@@ -24,17 +27,23 @@ export default {
     return {
       items: [],
       newItem: {
-          name: ''
+        name: '',
       },
     };
   },
   methods: {
     addItem() {
+      this.$validator.validateAll().then((result) => {
+        if (!result) {
+          return;
+        }
         this.items.push({
-            id: uuid(),
-            ...this.newItem
+          id: uuid(),
+          ...this.newItem,
         });
         this.newItem.name = '';
+        this.$validator.reset();
+      });
     },
     removeItem(item) {
       this.items.pop(item);
