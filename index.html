@@ -9,10 +9,10 @@
 <body>
 <div id="app">
     <h1>Item list</h1>
+    <button @click="addHardcodedItem()">Add hardcoded item</button>
     <ul>
         <li v-for="item in items">{{ item.name }}</li>
     </ul>
-
 </div>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
 <script>
@@ -31,6 +31,9 @@
             ]
         },
         methods: {
+            addHardcodedItem() {
+                this.items.push({id: 999, name: 'hardcoded one'})
+            },
             addItem() {
 
             },
