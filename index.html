@@ -11,7 +11,7 @@
     <h1>Item list</h1>
     <button @click="addHardcodedItem()">Add hardcoded item</button>
     <ul>
-        <li v-for="item in items" :id="item.id">{{ item.name }}</li>
+        <li v-for="item in items" :key="item.id" :id="item.id">{{ item.name }} <button @click="removeItem(item)">Remove</button></li>
     </ul>
     <label for="addItem">Add item</label>
     <input id="addItem" name="addItem" type="text" v-model="newItem">
@@ -44,7 +44,7 @@
                 this.items.push({id: 999, name: 'hardcoded one'})
             },
             addItem() {
-                var value = this.newItem && this.newItem.trim();
+                let value = this.newItem && this.newItem.trim();
                 if (!value) {
                     return
                 }
@@ -54,8 +54,8 @@
                 });
                 this.newItem = ''
             },
-            removeItem() {
-
+            removeItem(item) {
+                this.items.pop(item)
             }
         }
     })
