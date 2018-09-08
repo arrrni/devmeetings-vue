@@ -6,8 +6,8 @@ const store = {
         orderItems: [],
     },
     async fetchItems() {
-        this.items = await axios.get('http://localhost:3000/posts').then(result => result.data);
-        this.orderItems = await axios.get('http://localhost:3000/posts').then(result => result.data);
+        this.state.items = await axios.get('http://localhost:3000/posts/').then(result => result.data);
+        this.state.orderItems = await axios.get('http://localhost:3000/posts/').then(result => result.data);
     },
     addItem(item) {
         this.state.items.push(item);
