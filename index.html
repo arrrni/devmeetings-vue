@@ -11,8 +11,11 @@
     <h1>Item list</h1>
     <button @click="addHardcodedItem()">Add hardcoded item</button>
     <ul>
-        <li v-for="item in items">{{ item.name }}</li>
+        <li v-for="item in items" :id="item.id">{{ item.name }}</li>
     </ul>
+    <label for="addItem">Add item</label>
+    <input id="addItem" name="addItem" type="text" v-model="newItem">
+    <button @click="addItem()">Add Item</button>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
 <script>
@@ -28,14 +31,28 @@
                     id: 2,
                     name: 'example #2'
                 }
-            ]
+            ],
+            newItem: ''
+        },
+        computed: {
+            lastItemId() {
+                return this.items.length
+            }
         },
         methods: {
             addHardcodedItem() {
                 this.items.push({id: 999, name: 'hardcoded one'})
             },
             addItem() {
-
+                var value = this.newItem && this.newItem.trim();
+                if (!value) {
+                    return
+                }
+                this.items.push({
+                    id: this.lastItemId + 1,
+                    name: value
+                });
+                this.newItem = ''
             },
             removeItem() {
 
