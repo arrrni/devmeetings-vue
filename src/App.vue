@@ -1,56 +1,40 @@
 <template>
     <div id="app">
         <h1>Item list</h1>
-        <button @click="addHardcodedItem()">Add hardcoded item</button>
         <ul>
             <li v-for="item in items" :key="item.id" :id="item.id">{{ item.name }}
                 <button @click="removeItem(item)">Remove</button>
             </li>
         </ul>
         <p v-if="!items.length">No items!</p>
-        <label for="addItem">Add item</label>
-        <input id="addItem" name="addItem" type="text" v-model="newItem">
+        <form @submit.prevent="addItem">
+            <label for="addItem">Item to add</label>
+            <input id="addItem" type="text" v-model="newItem.name">
+        </form>
         <button @click="addItem()">Add Item</button>
     </div>
 </template>
 
 <script>
+import uuid from 'uuid/v4';
+
 export default {
   name: 'app',
   data() {
     return {
-      items: [
-        {
-          id: 1,
-          name: 'example #1',
-        },
-        {
-          id: 2,
-          name: 'example #2',
-        },
-      ],
-      newItem: '',
+      items: [],
+      newItem: {
+          name: ''
+      },
     };
   },
-  computed: {
-    lastItemId() {
-      return this.items.length;
-    },
-  },
   methods: {
-    addHardcodedItem() {
-      this.items.push({ id: 999, name: 'hardcoded one' });
-    },
     addItem() {
-      const value = this.newItem && this.newItem.trim();
-      if (!value) {
-        return;
-      }
-      this.items.push({
-        id: this.lastItemId + 1,
-        name: value,
-      });
-      this.newItem = '';
+        this.items.push({
+            id: uuid(),
+            ...this.newItem
+        });
+        this.newItem.name = '';
     },
     removeItem(item) {
       this.items.pop(item);
