@@ -1,76 +1,52 @@
 <template>
     <div id="app">
         <h1>Item list</h1>
-        <ul>
-            <li v-for="item in items" :key="item.id" :id="item.id">{{ item.name }}
-                <button @click="removeItem(item)">Remove</button>
-            </li>
-        </ul>
+        <item-list :items="items" @remove-item="onRemoveItem"></item-list>
         <p v-if="!items.length">No items!</p>
-        <form @submit.prevent="addItem">
-            <label for="addItem">Item to add</label>
-            <input name="item" id="addItem" v-model="newItem.name" v-validate="'required|min:3'">
-            <div v-show="errors.has('item')">
-                {{ errors.first('item') }}
-            </div>
-        </form>
+        <add-item @add-item="onAddItem"></add-item>
         <hr>
         <h1>Order items</h1>
-        <form @submit.prevent="orderItem">
-            <label for="itemList">Select item from list</label>
-            <select id="itemList" v-model="selectedItem.id">
-                <option v-for="item in items" :key="item.id" :value="item.id">{{ item.name }}</option>
-            </select>
-            <input type="submit" value="Order selected">
-        </form>
-        <ul>
-            <li v-for="item in orderItems" :key="item.id" :id="item.id">{{ item.name }}</li>
-        </ul>
+        <add-item @add-item="onAddOrderItem"></add-item>
+        <item-list :items="orderItems" @remove-item="onRemoveOrderItem"></item-list>
     </div>
 </template>
 
 <script>
-import uuid from 'uuid/v4';
+import ItemList from './components/ItemList.vue';
+import AddItem from './components/AddItem.vue';
 
 export default {
   name: 'app',
+  components: {
+    ItemList,
+      AddItem
+  },
   data() {
     return {
       items: [],
       orderItems: [],
-      newItem: {
-        name: '',
-      },
       selectedItem: {
         id: '',
       },
     };
   },
   methods: {
-    addItem() {
-      this.$validator.validateAll().then((result) => {
-        if (!result) {
-          return;
-        }
-        this.items.push({
-          id: uuid(),
-          ...this.newItem,
-        });
-        this.newItem.name = '';
-        this.$validator.reset();
-      });
+    onAddItem(item) {
+      this.items.push(item)
     },
-    removeItem(item) {
+      onAddOrderItem(item) {
+          let current = this.items.find(x => x.name === item.name);
+          if (!current) {
+              return;
+          }
+          this.orderItems.push(current);
+      },
+    onRemoveItem(item) {
       this.items.pop(item);
     },
-    orderItem() {
-      const item = this.items.find(x => x.id === this.selectedItem.id);
-      if (!item) {
-        return;
-      }
-      this.orderItems.push(item);
-      this.selectedItem.id = '';
-    },
+      onRemoveOrderItem(item) {
+        this.orderItems.pop(item)
+      },
   },
 };
 </script>
