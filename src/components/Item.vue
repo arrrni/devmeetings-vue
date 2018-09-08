@@ -12,11 +12,11 @@ export default {
       type: Object,
     },
   },
-    methods: {
-      removeItem(item) {
-          this.$emit('remove-item', item)
-      }
-    }
+  methods: {
+    removeItem(item) {
+      this.$emit('remove-item', item);
+    },
+  },
 };
 </script>
 

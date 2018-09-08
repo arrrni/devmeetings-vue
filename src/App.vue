@@ -19,7 +19,7 @@ export default {
   name: 'app',
   components: {
     ItemList,
-      AddItem
+    AddItem,
   },
   data() {
     return {
@@ -32,21 +32,21 @@ export default {
   },
   methods: {
     onAddItem(item) {
-      this.items.push(item)
+      this.items.push(item);
     },
-      onAddOrderItem(item) {
-          let current = this.items.find(x => x.name === item.name);
-          if (!current) {
-              return;
-          }
-          this.orderItems.push(current);
-      },
+    onAddOrderItem(item) {
+      const current = this.items.find(x => x.name === item.name);
+      if (!current) {
+        return;
+      }
+      this.orderItems.push(current);
+    },
     onRemoveItem(item) {
       this.items.pop(item);
     },
-      onRemoveOrderItem(item) {
-        this.orderItems.pop(item)
-      },
+    onRemoveOrderItem(item) {
+      this.orderItems.pop(item);
+    },
   },
 };
 </script>

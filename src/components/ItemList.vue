@@ -13,13 +13,13 @@ export default {
     Item,
   },
   props: {
-    items: Array
+    items: Array,
   },
-    methods: {
-      removeItem(item) {
-          this.$emit('remove-item', item)
-      }
-    }
+  methods: {
+    removeItem(item) {
+      this.$emit('remove-item', item);
+    },
+  },
 };
 </script>
 
